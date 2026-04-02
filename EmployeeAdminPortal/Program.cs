@@ -41,13 +41,9 @@ var app = builder.Build();
 // 4. KÍCH HOẠT CORS (Bắt buộc phải nằm ở vị trí này, trước UseAuthorization)
 app.UseCors("AllowAll");
 
-// 5. CẤU HÌNH SWAGGER & ROUTE
-// Đã xóa điều kiện if để Swagger luôn chạy, giúp bạn test dễ dàng trên Railway
+
 app.UseSwagger();
 app.UseSwaggerUI();
-
-// (Tùy chọn) Thêm dòng này để khi vào trang chủ không bị báo lỗi 404
-app.MapGet("/", () => "API đang chạy thành công trên Railway!");
 
 app.UseHttpsRedirection();
 
