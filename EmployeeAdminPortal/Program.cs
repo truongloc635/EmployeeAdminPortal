@@ -12,8 +12,17 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddDbContext<ApplicationDbContext>(options=>
 //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")) 
 //);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if(!builder.Environment.IsDevelopment())
+{
+    var envCon = Environment.GetEnvironmentVariable("DATABASE_URL");
+    if(!string.IsNullOrEmpty(envCon))
+    {
+        connectionString = envCon;
+    }
+}
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+    options.UseNpgsql(builder.Configuration.GetConnectionString(connectionString))
 );
 
 var app = builder.Build();
