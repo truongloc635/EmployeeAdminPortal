@@ -23,11 +23,14 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 if (!builder.Environment.IsDevelopment())
 {
-    // Tìm biến môi trường có tên "DATABASE_URL" trên hệ thống Railway
     var envCon = Environment.GetEnvironmentVariable("DATABASE_URL");
     if (!string.IsNullOrEmpty(envCon))
     {
-        connectionString = envCon; // Nạp chuỗi từ Server đè lên chuỗi Local
+        // Đoạn code "Phép thuật" giúp tự động dịch link URL của Railway sang chuẩn của .NET
+        var databaseUri = new Uri(envCon);
+        var userInfo = databaseUri.UserInfo.Split(':');
+
+        connectionString = $"Host={databaseUri.Host};Port={databaseUri.Port};Database={databaseUri.LocalPath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
     }
 }
 
